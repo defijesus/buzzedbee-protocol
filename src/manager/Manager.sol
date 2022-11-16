@@ -21,8 +21,8 @@ contract Manager is IManager, UUPS, Ownable, ManagerStorageV1 {
     ///                          IMMUTABLES                      ///
     ///                                                          ///
 
-    /// @notice The token implementation address
-    address public immutable tokenImpl;
+    /// @notice The token implementation address mapping
+    mapping(uint256 => address) public tokenImpl;
 
     /// @notice The metadata renderer implementation address
     address public immutable metadataImpl;
@@ -47,7 +47,7 @@ contract Manager is IManager, UUPS, Ownable, ManagerStorageV1 {
         address _treasuryImpl,
         address _governorImpl
     ) payable initializer {
-        tokenImpl = _tokenImpl;
+        tokenImpl[0] = _tokenImpl;
         metadataImpl = _metadataImpl;
         auctionImpl = _auctionImpl;
         treasuryImpl = _treasuryImpl;
@@ -73,17 +73,20 @@ contract Manager is IManager, UUPS, Ownable, ManagerStorageV1 {
     ///                                                          ///
 
     /// @notice Deploys a DAO with custom token, auction, and governance settings
+    /// @param _tokenImplId The token implementation address ID
     /// @param _founderParams The DAO founders
     /// @param _tokenParams The ERC-721 token settings
     /// @param _auctionParams The auction settings
     /// @param _govParams The governance settings
     function deploy(
+        uint256 _tokenImplId,
         FounderParams[] calldata _founderParams,
         TokenParams calldata _tokenParams,
         AuctionParams calldata _auctionParams,
         GovParams calldata _govParams
     )
         external
+        onlyOwner
         returns (
             address token,
             address metadata,
@@ -100,7 +103,7 @@ contract Manager is IManager, UUPS, Ownable, ManagerStorageV1 {
         if ((founder = _founderParams[0].wallet) == address(0)) revert FOUNDER_REQUIRED();
 
         // Deploy the DAO's ERC-721 governance token
-        token = address(new ERC1967Proxy(tokenImpl, ""));
+        token = address(new ERC1967Proxy(tokenImpl[_tokenImplId], ""));
 
         // Use the token address to precompute the DAO's remaining addresses
         bytes32 salt = bytes32(uint256(uint160(token)) << 96);
@@ -208,4 +211,11 @@ contract Manager is IManager, UUPS, Ownable, ManagerStorageV1 {
     /// @dev This function is called in `upgradeTo` & `upgradeToAndCall`
     /// @param _newImpl The new implementation address
     function _authorizeUpgrade(address _newImpl) internal override onlyOwner {}
+
+    /// @notice Registers a new token implementation
+    /// @param _id The id to store implementation address
+    /// @param _impl The implementation address
+    function registerTokenImpl(uint256 _id, address _impl) external onlyOwner {
+        tokenImpl[_id] = _impl;
+    }
 }

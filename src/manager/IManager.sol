@@ -86,7 +86,8 @@ interface IManager is IUUPS, IOwnable {
     ///                                                          ///
 
     /// @notice The token implementation address
-    function tokenImpl() external view returns (address);
+    /// @param _id The token implementation address id
+    function tokenImpl(uint256 _id) external view returns (address);
 
     /// @notice The metadata renderer implementation address
     function metadataImpl() external view returns (address);
@@ -101,11 +102,13 @@ interface IManager is IUUPS, IOwnable {
     function governorImpl() external view returns (address);
 
     /// @notice Deploys a DAO with custom token, auction, and governance settings
+    /// @param tokenImplId The token implementation address ID
     /// @param founderParams The DAO founder(s)
     /// @param tokenParams The ERC-721 token settings
     /// @param auctionParams The auction settings
     /// @param govParams The governance settings
     function deploy(
+        uint256 tokenImplId,
         FounderParams[] calldata founderParams,
         TokenParams calldata tokenParams,
         AuctionParams calldata auctionParams,
@@ -145,4 +148,9 @@ interface IManager is IUUPS, IOwnable {
     /// @param baseImpl The base implementation address
     /// @param upgradeImpl The upgrade implementation address
     function removeUpgrade(address baseImpl, address upgradeImpl) external;
+
+    /// @notice Registers a new token implementation
+    /// @param id The id to store implementation address
+    /// @param impl The implementation address
+    function registerTokenImpl(uint256 id, address impl) external;
 }

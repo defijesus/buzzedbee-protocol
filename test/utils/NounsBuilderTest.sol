@@ -70,8 +70,10 @@ contract NounsBuilderTest is Test {
 
         managerImpl = address(new Manager(tokenImpl, metadataRendererImpl, auctionImpl, treasuryImpl, governorImpl));
 
-        vm.prank(zoraDAO);
+        vm.startPrank(zoraDAO);
         manager.upgradeTo(managerImpl);
+        manager.registerTokenImpl(0, tokenImpl);
+        vm.stopPrank();
     }
 
     ///                                                          ///
@@ -267,12 +269,15 @@ contract NounsBuilderTest is Test {
         IManager.AuctionParams memory _auctionParams,
         IManager.GovParams memory _govParams
     ) internal virtual {
+        vm.startPrank(zoraDAO);
         (address _token, address _metadata, address _auction, address _treasury, address _governor) = manager.deploy(
+            0,
             _founderParams,
             _tokenParams,
             _auctionParams,
             _govParams
         );
+        vm.stopPrank();
 
         token = Token(_token);
         metadataRenderer = MetadataRenderer(_metadata);

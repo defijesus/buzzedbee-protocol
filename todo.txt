@@ -1,0 +1,17 @@
+- test Bee claim and mint process, check if claim and auction mint tokenIds line up
+- 
+
+
+Random Notes:
+
+Goerli Buzzed Bee (https://goerli.etherscan.io/tx/0x84d140d2ee3f608f6e9902561d6c5845474b439aa13b50686f8b1fea209911ba)
+token: 0xabF8872DBf2D91E0CD0CcC91c6a1e90bE46faDaf
+auction: 0xb6eCB5a02C33a626eC54d83CC40bE3305b358D54
+treasury: 0x55d1bFF475C668C0DC87B6862f0E409483050926
+governor: 0xafebF5EC655E9F3FF41dafb1263262641Eff4960
+metadata: 0xb8DB262a15Db9A9d366D0098f4024B93653979b3
+
+1) "addProperties(string[],(uint256,string,bool)[],(string,string))"
+[0-backgrounds, 1-bodies, 2-accessories, 3-heads, 4-glasses]
+[(0, bg-cool, true), (0, bg-warm, true), (1, body-rust, true), (1, body-blue-sky, true), (1, body-darkbrown, true), (2, accessory-txt-cc2, true), (2, accessory-txt-ico, true), (2, accessory-flash, true), (3, head-hotdog, true), (3, head-ufo, true), (3, head-goldcoin, true), (4, glasses-square-teal, true), (4, glasses-square-guava, true), (4, glasses-square-black-rgb, true)]
+(ipfs://bafybeihcsfjvnjmzivm4gxgt75zwajtfxumyxd7j6ibvloykpg4sx47uca/, .png)
